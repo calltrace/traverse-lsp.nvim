@@ -29,7 +29,7 @@ jobs:
         run: |
           curl -LO https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-x86_64.tar.gz
           tar xzf nvim-linux-x86_64.tar.gz
-          echo "$PWD/nvim-linux64/bin" >> $GITHUB_PATH
+          echo "$PWD/nvim-linux-x86_64/bin" >> $GITHUB_PATH
       
       - name: Check Neovim version
         run: nvim --version
