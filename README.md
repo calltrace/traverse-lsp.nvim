@@ -2,7 +2,7 @@
 
 Neovim 0.11+ plugin for traverse-lsp - Workspace-level analysis and diagram generation for Solidity projects.
 
-> **Requirements:** Neovim 0.11+ only (no Rust toolchain needed!)
+> **Requirements:** Neovim 0.11+ only
 
 ## Features
 

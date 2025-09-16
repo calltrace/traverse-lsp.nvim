@@ -27,7 +27,7 @@ jobs:
       
       - name: Install Neovim
         run: |
-          wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
+          curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
           tar xzf nvim-linux64.tar.gz
           echo "$PWD/nvim-linux64/bin" >> $GITHUB_PATH
       
