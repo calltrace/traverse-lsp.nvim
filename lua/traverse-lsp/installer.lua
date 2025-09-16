@@ -123,17 +123,24 @@ function M.download()
     -- Verify installation
     if M.is_installed() then
         -- Try to get version, but don't fail if it doesn't work
-        local version = "installed"
         local version_cmd = M.get_binary_path() .. " --version 2>/dev/null"
-        local ok, version_output = pcall(vim.fn.system, version_cmd)
-        if ok and vim.v.shell_error == 0 and version_output and not version_output:match("disconnected") then
-            version = vim.trim(version_output)
+        local version_ok, version_output = pcall(vim.fn.system, version_cmd)
+        if version_ok and vim.v.shell_error == 0 and version_output and not version_output:match("disconnected") then
+            local version = vim.trim(version_output)
+            vim.notify(
+                string.format(
+                    "✓ traverse-lsp installed successfully!\nLocation: %s\nVersion: %s",
+                    M.get_binary_path(),
+                    version
+                ),
+                vim.log.levels.INFO
+            )
+        else
+            vim.notify(
+                string.format("✓ traverse-lsp installed successfully!\nLocation: %s", M.get_binary_path()),
+                vim.log.levels.INFO
+            )
         end
-
-        vim.notify(
-            string.format("✓ traverse-lsp installed successfully!\nLocation: %s", M.get_binary_path()),
-            vim.log.levels.INFO
-        )
         return true
     else
         vim.notify("Installation completed but binary not found", vim.log.levels.ERROR)
