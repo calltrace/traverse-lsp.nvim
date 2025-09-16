@@ -15,13 +15,23 @@
   "scripts": {
     "install": "make install",
     "install-dev": "make install-dev",
+    "uninstall": "make uninstall",
+    "uninstall-dev": "make uninstall-dev",
+    "uninstall-binary": "make uninstall-binary",
+    "uninstall-all": "make uninstall-all",
     "test": "make test",
     "lint": "make lint",
-    "format": "make format"
+    "format": "make format",
+    "syntax-check": "make syntax-check",
+    "check": "make check",
+    "all": "make all",
+    "help": "make help"
   },
   "files": [
     "lua/",
+    "plugin/",
     "README.md",
+    "LICENSE",
     "Makefile"
   ],
   "license": "MIT"
