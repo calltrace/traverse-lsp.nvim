@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Install Neovim
+        run: |
+          wget https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz
+          tar xzf nvim-linux64.tar.gz
+          echo "$PWD/nvim-linux64/bin" >> $GITHUB_PATH
+      
+      - name: Verify plugin
+        run: |
+          nvim --version
+          make syntax-check
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          body: |
+            ## Installation
+            
+            ### Using lazy.nvim
+            ```lua
+            { "calltrace/traverse-lsp.nvim", tag = "${{ github.ref_name }}" }
+            ```
+            
+            ### Using packer.nvim
+            ```lua
+            use { "calltrace/traverse-lsp.nvim", tag = "${{ github.ref_name }}" }
+            ```
+            
+            ## What's Changed
+            See the full changelog below.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

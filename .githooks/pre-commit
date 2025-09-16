@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Run syntax check before committing
+echo "Running Lua syntax check..."
+make syntax-check
+
+if [ $? -ne 0 ]; then
+    echo "❌ Commit aborted due to syntax errors"
+    exit 1
+fi
+
+echo "✅ All checks passed"

@@ -1,0 +1,28 @@
+{
+  "name": "traverse-lsp.nvim",
+  "version": "0.1.0",
+  "description": "Neovim plugin for Traverse",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calltrace/traverse-lsp.nvim"
+  },
+  "keywords": [
+    "neovim",
+    "nvim",
+    "lsp",
+    "solidity"
+  ],
+  "scripts": {
+    "install": "make install",
+    "install-dev": "make install-dev",
+    "test": "make test",
+    "lint": "make lint",
+    "format": "make format"
+  },
+  "files": [
+    "lua/",
+    "README.md",
+    "Makefile"
+  ],
+  "license": "MIT"
+}

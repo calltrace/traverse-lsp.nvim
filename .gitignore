@@ -1,0 +1,11 @@
+*.luac
+.netrwhist
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+test/output/
+*.log
+dist/
+build/
