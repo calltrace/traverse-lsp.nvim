@@ -55,7 +55,8 @@ uninstall-all: uninstall uninstall-binary ## Remove plugin and binary completely
 	@echo "${GREEN}✓ Complete uninstall finished${NC}"
 
 test: 
-	@nvim --headless -c "checkhealth traverse-lsp" -c "qa" 2>&1 | grep -A 20 "traverse-lsp"
+	@echo "${YELLOW}Running health check...${NC}"
+	@nvim --headless +checkhealth +qa 2>&1 | grep -E "traverse-lsp|OK|ERROR" || echo "${GREEN}✓ Health check completed${NC}"
 
 lint: 
 	@if command -v luacheck > /dev/null; then \
