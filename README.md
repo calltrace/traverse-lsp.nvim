@@ -347,21 +347,31 @@ npm run uninstall-dev # Remove development symlink
    make syntax-check  # Syntax validation
    ```
 
-### Release Process
+### Contributing Process
 
-1. **Update version if needed** (package.json)
-2. **Commit all changes:**
+1. **Fork the repository** on GitHub
+2. **Clone your fork:**
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/traverse-lsp.nvim.git
+   cd traverse-lsp.nvim
+   ```
+3. **Create a feature branch:**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+4. **Make changes and test:**
+   ```bash
+   make lint
+   make syntax-check
+   make test
+   ```
+5. **Commit and push to your fork:**
    ```bash
    git add .
-   git commit -m "Your changes"
-   git push origin main
+   git commit -m "Description of changes"
+   git push origin feature/your-feature-name
    ```
-3. **Create and push tag:**
-   ```bash
-   git tag v0.1.x
-   git push origin v0.1.x
-   ```
-4. **GitHub Actions will automatically create the release**
+6. **Create a Pull Request** on GitHub from your fork to the main repository
 
 ### Contributing Guidelines
 
