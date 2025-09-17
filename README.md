@@ -1,4 +1,4 @@
-# Traverse Plugin for NeoVim
+# Traverse Plugin for Neovim
 
 Neovim 0.11+ plugin for traverse-lsp - Workspace-level analysis and diagram generation for Solidity projects.
 
@@ -21,7 +21,11 @@ Neovim 0.11+ plugin for traverse-lsp - Workspace-level analysis and diagram gene
 **Quick Install** - Zero configuration:
 
 ```lua
+-- Inside ~/.config/nvim/init.lua with other plugins:
 { "calltrace/traverse-lsp.nvim" }
+
+-- Inside ~/.config/nvim/lua/plugins/traverse-lsp.lua:
+return { "calltrace/traverse-lsp.nvim" }
 ```
 
 **Full Setup** - With keybindings and optimizations:
@@ -168,6 +172,7 @@ If you prefer to manage the binary yourself:
 ## Diagram Generation Examples
 
 ### Generate Call Graph
+
 ```vim
 :TraverseCallGraph
 " Output: traverse-output/call-graphs/call-graph-2025-09-16.dot
@@ -178,6 +183,7 @@ If you prefer to manage the binary yourself:
 ```
 
 ### Generate Sequence Diagram
+
 ```vim
 :TraverseSequenceDiagram
 " Output: traverse-output/sequence-diagrams/sequence-2025-09-16.mmd
@@ -187,6 +193,7 @@ If you prefer to manage the binary yourself:
 ```
 
 ### Analyze Storage Layout
+
 ```vim
 :TraverseAnalyzeStorage
 " Output: traverse-output/storage-reports/storage-2025-09-16.md
@@ -194,6 +201,7 @@ If you prefer to manage the binary yourself:
 ```
 
 ### Generate Everything at Once
+
 ```vim
 :TraverseGenerateAll
 " Creates all diagrams in their respective directories
@@ -256,6 +264,112 @@ This will show:
 
 - Ensure server is running: `:TraverseStatus`
 - Check for Solidity files in workspace
+
+## Development
+
+### Setting Up Development Environment
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/calltrace/traverse-lsp.nvim.git
+   cd traverse-lsp.nvim
+   ```
+
+2. **Install development symlink:**
+
+   ```bash
+   make install-dev
+   # Creates symlink at ~/.local/share/nvim/site/pack/traverse/start/traverse-lsp.nvim
+   ```
+
+3. **Configure Lazy.nvim for development:**
+
+   Create `~/.config/nvim/lua/plugins/traverse-lsp.lua`:
+
+   ```lua
+   return {
+     dir = "~/path/to/traverse-lsp.nvim",  -- Your local clone path
+     name = "traverse-lsp",
+     lazy = false,
+   }
+   ```
+
+### Development Commands
+
+**Using Make:**
+
+```bash
+make help           # Show all available commands
+make syntax-check   # Check Lua syntax
+make lint           # Run luacheck
+make format         # Format with stylua
+make test           # Run health check
+make install-dev    # Create development symlink
+make uninstall-dev  # Remove development symlink
+```
+
+**Using NPM (alternative):**
+
+```bash
+npm run help        # Show all available commands
+npm run syntax-check # Check Lua syntax
+npm run lint        # Run luacheck
+npm run format      # Format with stylua
+npm run test        # Run health check
+npm run install-dev # Create development symlink
+npm run uninstall-dev # Remove development symlink
+```
+
+> **Note:** NPM support is provided for convenience. All npm scripts delegate to the Makefile targets.
+
+### Testing Changes
+
+1. **Local testing with symlink:**
+
+   ```bash
+   make install-dev
+   nvim
+   :TraverseStatus
+   ```
+
+2. **Testing as a user would install it:**
+
+   ```lua
+   -- In ~/.config/nvim/lua/plugins/traverse-lsp.lua
+   return { "calltrace/traverse-lsp.nvim" }
+   ```
+
+3. **Running tests:**
+   ```bash
+   make test          # Health check
+   make lint          # Code quality
+   make syntax-check  # Syntax validation
+   ```
+
+### Release Process
+
+1. **Update version if needed** (package.json)
+2. **Commit all changes:**
+   ```bash
+   git add .
+   git commit -m "Your changes"
+   git push origin main
+   ```
+3. **Create and push tag:**
+   ```bash
+   git tag v0.1.x
+   git push origin v0.1.x
+   ```
+4. **GitHub Actions will automatically create the release**
+
+### Contributing Guidelines
+
+- Follow existing code style (use `make format`)
+- Ensure `make lint` passes
+- Test with `make syntax-check`
+- Update README for new features
+- Keep zero-configuration philosophy
 
 ## License
 
