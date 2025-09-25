@@ -9,7 +9,12 @@ permissions:
   contents: write
 
 jobs:
+  test:
+    name: Test before release
+    uses: ./.github/workflows/test.yml
+  
   release:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
