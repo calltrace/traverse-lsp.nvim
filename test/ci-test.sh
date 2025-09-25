@@ -102,10 +102,10 @@ echo "================================================"
 echo -e "\n${YELLOW}Building Docker image...${NC}"
 if [ -n "$CI" ]; then
     # In CI, show build output for debugging
-    docker build -f Dockerfile -t traverse-test .
+    docker build -f ../Dockerfile -t traverse-test ..
 else
     # Local builds can be quieter
-    docker build -f Dockerfile -t traverse-test . > /dev/null 2>&1
+    docker build -f ../Dockerfile -t traverse-test .. > /dev/null 2>&1
 fi
 
 if [ $? -eq 0 ]; then
