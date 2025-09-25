@@ -9,11 +9,20 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Neovim 0.11.4 from GitHub releases (ARM64 for M1/M2 Macs)
-RUN wget https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-arm64.tar.gz \
-    && tar xzf nvim-linux-arm64.tar.gz \
-    && cp -r nvim-linux-arm64/* /usr/local/ \
-    && rm -rf nvim-linux-arm64*
+# Install Neovim 0.11.4 from GitHub releases
+# Detect architecture and download appropriate version
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        NVIM_ARCH="x86_64"; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+        NVIM_ARCH="arm64"; \
+    else \
+        echo "Unsupported architecture: $ARCH" && exit 1; \
+    fi && \
+    wget https://github.com/neovim/neovim/releases/download/v0.11.4/nvim-linux-${NVIM_ARCH}.tar.gz && \
+    tar xzf nvim-linux-${NVIM_ARCH}.tar.gz && \
+    cp -r nvim-linux-${NVIM_ARCH}/* /usr/local/ && \
+    rm -rf nvim-linux-${NVIM_ARCH}*
 
 # Create test user
 RUN useradd -m -s /bin/bash nvimtest

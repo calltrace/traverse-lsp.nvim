@@ -100,7 +100,14 @@ echo "================================================"
 
 # Step 1: Build Docker image
 echo -e "\n${YELLOW}Building Docker image...${NC}"
-docker build -f Dockerfile -t traverse-test . > /dev/null 2>&1
+if [ -n "$CI" ]; then
+    # In CI, show build output for debugging
+    docker build -f Dockerfile -t traverse-test .
+else
+    # Local builds can be quieter
+    docker build -f Dockerfile -t traverse-test . > /dev/null 2>&1
+fi
+
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}✓ Docker image built successfully${NC}"
 else
