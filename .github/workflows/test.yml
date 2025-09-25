@@ -1,0 +1,78 @@
+name: Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test on ${{ matrix.platform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        if: matrix.platform == 'linux/arm64'
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Run tests
+        run: |
+          chmod +x test/ci-test.sh
+          cd test && DOCKER_DEFAULT_PLATFORM=${{ matrix.platform }} ./ci-test.sh
+        env:
+          CI: true
+      
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-artifacts-${{ matrix.platform }}
+          path: test-artifacts/
+          retention-days: 7
+      
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "## Test Results for ${{ matrix.platform }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f test-artifacts/summary.md ]; then
+            cat test-artifacts/summary.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ Tests completed" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  lint:
+    name: Lua Lint & Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Install Lua and tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.4 luarocks
+          sudo luarocks install luacheck
+      
+      - name: Run luacheck
+        run: |
+          luacheck lua/ --globals vim
+      
+      - name: Check syntax
+        run: |
+          find lua/ -name "*.lua" -exec luac -p {} \;
