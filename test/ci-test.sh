@@ -200,6 +200,17 @@ run_test "Sequence diagram generation" \
     "cd /home/nvimtest/test-project && nvim --headless example.sol -c ':TraverseStart' -c ':sleep 2000m' -c ':TraverseSequenceDiagram' -c ':sleep 3000m' -c ':qa' 2>&1" \
     "sequence"
 
+# Check sequence-diagrams folder exists
+SEQUENCE_DIR="/home/nvimtest/test-project/traverse-output/sequence-diagrams"
+if docker exec traverse-test-container test -d "$SEQUENCE_DIR" 2>/dev/null; then
+    echo -e "${GREEN}✓ Sequence diagrams folder exists${NC}"
+    TESTS_PASSED=$((TESTS_PASSED + 1))
+else
+    echo -e "${RED}✗ Sequence diagrams folder not found${NC}"
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    FAILURES="${FAILURES}\n  - Sequence diagrams folder not found"
+fi
+
 # Check sequence diagram file
 # Use wildcard to handle any date
 SEQUENCE_FILE=$(docker exec traverse-test-container bash -c "ls /home/nvimtest/test-project/traverse-output/sequence-diagrams/sequence-*.mmd 2>/dev/null | head -1" || echo "")
@@ -217,6 +228,7 @@ if [ -n "$SEQUENCE_FILE" ]; then
         TESTS_FAILED=$((TESTS_FAILED + 1))
         FAILURES="${FAILURES}\n  - Sequence diagram file is empty"
     fi
+    
 else
     echo -e "${RED}✗ Sequence diagram file not found${NC}"
     TESTS_FAILED=$((TESTS_FAILED + 1))
