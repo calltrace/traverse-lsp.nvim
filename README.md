@@ -1,7 +1,7 @@
 # Traverse Plugin for Neovim
 
-[![Test](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/test.yml/badge.svg)](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/test.yml)
-[![Release](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/release.yml/badge.svg)](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/release.yml)
+[![Test](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/test.yml)
+[![Release](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/release.yml/badge.svg?event=push)](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/release.yml)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/calltrace/traverse-lsp.nvim)](https://github.com/calltrace/traverse-lsp.nvim/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
