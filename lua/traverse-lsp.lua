@@ -113,6 +113,7 @@ function M.generate_call_graph()
         arguments = {
             {
                 workspace_folder = client.config.root_dir or vim.fn.getcwd(),
+                no_chunk = M._config and M._config.no_chunk,
             },
         },
     }
@@ -186,6 +187,7 @@ function M.generate_sequence_diagram()
         arguments = {
             {
                 workspace_folder = client.config.root_dir or vim.fn.getcwd(),
+                no_chunk = M._config and M._config.no_chunk or false,
             },
         },
     }
@@ -230,6 +232,7 @@ function M.generate_all()
         arguments = {
             {
                 workspace_folder = client.config.root_dir or vim.fn.getcwd(),
+                no_chunk = M._config and M._config.no_chunk,
             },
         },
     }
@@ -450,6 +453,7 @@ function M.setup(opts)
         auto_start = true, -- Auto-start server on plugin setup (default: true)
         auto_install = true, -- Auto-install binary if not found (default: true)
         debug = false, -- Enable debug logging (default: false)
+        no_chunk = false, -- Disable chunking for mermaid diagrams (default: false - chunking enabled)
     }, opts)
 
     M._config = config

@@ -53,6 +53,7 @@ return { "calltrace/traverse-lsp.nvim" }
   opts = {
     auto_start = true,     -- default: true
     auto_install = true,   -- default: true
+    no_chunk = false,      -- Disable mermaid chunking (default: false - chunking enabled)
   },
   keys = {
     { "<leader>tg", "<cmd>TraverseCallGraph<cr>", desc = "Call Graph" },
@@ -207,6 +208,54 @@ If you prefer to manage the binary yourself:
 " Creates all diagrams in their respective directories
 ```
 
+## Mermaid Chunking for Large Diagrams
+
+When generating sequence diagrams for large projects, the plugin automatically splits them into manageable chunks. This feature is especially useful for complex contracts with many interactions.
+
+### How Chunking Works
+
+- Large diagrams are automatically split into multiple files
+- Each chunk maintains proper Mermaid syntax and can be rendered independently
+- An index file provides navigation between chunks
+- Metadata file contains chunk boundaries and statistics
+
+### Configuration
+
+To disable chunking and generate a single large file:
+
+```lua
+require("traverse-lsp").setup({
+  no_chunk = true,  -- Disable chunking (default: false - chunking enabled)
+})
+```
+
+### Output Structure
+
+When chunking is enabled (default) for large diagrams:
+
+```
+project/
+└── traverse-output/
+    └── sequence-diagrams/
+        ├── sequence-2025-09-29.mmd  -- Main diagram (first chunk)
+        └── chunks/                   -- Chunked output
+            ├── index.mmd            -- Navigation index
+            ├── chunk_001.mmd        -- First chunk
+            ├── chunk_002.mmd        -- Second chunk
+            ├── chunk_003.mmd        -- Third chunk
+            ├── ...
+            └── metadata.json        -- Chunk metadata
+```
+
+When chunking is disabled (`no_chunk = true`):
+
+```
+project/
+└── traverse-output/
+    └── sequence-diagrams/
+        └── sequence-2025-09-29.mmd  -- Single large file (no chunks)
+```
+
 ## Viewing Generated Diagrams
 
 ### DOT Files (Call Graphs)
@@ -228,6 +277,11 @@ dot -Tpng call_graph.dot | open -f -a Preview
 # Using mermaid-cli
 npm install -g @mermaid-js/mermaid-cli
 mmdc -i sequence.mmd -o sequence.png
+
+# For chunked diagrams, process each chunk:
+for chunk in traverse-output/sequence-diagrams/chunks/chunk_*.mmd; do
+  mmdc -i "$chunk" -o "${chunk%.mmd}.png"
+done
 
 # Or paste content to https://mermaid.live
 ```
