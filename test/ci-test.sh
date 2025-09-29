@@ -7,6 +7,9 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
+# Get current date in the format used by traverse-lsp
+CURRENT_DATE=$(date +%Y-%m-%d)
+
 # Test counters
 TESTS_PASSED=0
 TESTS_FAILED=0
@@ -170,11 +173,27 @@ run_test "Call graph generation" \
     "call-graph"
 
 # Check call graph file exists and is not empty
-check_file_exists "/home/nvimtest/test-project/traverse-output/call-graphs/call-graph-2025-09-25.dot" \
-    "Call graph file exists"
+# Use wildcard to handle any date
+CALL_GRAPH_FILE=$(docker exec traverse-test-container bash -c "ls /home/nvimtest/test-project/traverse-output/call-graphs/call-graph-*.dot 2>/dev/null | head -1" || echo "")
+if [ -n "$CALL_GRAPH_FILE" ]; then
+    echo -e "${GREEN}✓ Call graph file exists${NC}"
+    TESTS_PASSED=$((TESTS_PASSED + 1))
     
-check_file_not_empty "/home/nvimtest/test-project/traverse-output/call-graphs/call-graph-2025-09-25.dot" \
-    "Call graph file not empty"
+    # Check if not empty
+    size=$(docker exec traverse-test-container stat -c%s "$CALL_GRAPH_FILE" 2>/dev/null || echo "0")
+    if [ "$size" -gt "0" ]; then
+        echo -e "${GREEN}✓ Call graph file not empty (size: ${size} bytes)${NC}"
+        TESTS_PASSED=$((TESTS_PASSED + 1))
+    else
+        echo -e "${RED}✗ Call graph file is empty${NC}"
+        TESTS_FAILED=$((TESTS_FAILED + 1))
+        FAILURES="${FAILURES}\n  - Call graph file is empty"
+    fi
+else
+    echo -e "${RED}✗ Call graph file not found${NC}"
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    FAILURES="${FAILURES}\n  - Call graph file not found"
+fi
 
 # Test 7: Generate sequence diagram
 run_test "Sequence diagram generation" \
@@ -182,11 +201,27 @@ run_test "Sequence diagram generation" \
     "sequence"
 
 # Check sequence diagram file
-check_file_exists "/home/nvimtest/test-project/traverse-output/sequence-diagrams/sequence-2025-09-25.mmd" \
-    "Sequence diagram file exists"
+# Use wildcard to handle any date
+SEQUENCE_FILE=$(docker exec traverse-test-container bash -c "ls /home/nvimtest/test-project/traverse-output/sequence-diagrams/sequence-*.mmd 2>/dev/null | head -1" || echo "")
+if [ -n "$SEQUENCE_FILE" ]; then
+    echo -e "${GREEN}✓ Sequence diagram file exists${NC}"
+    TESTS_PASSED=$((TESTS_PASSED + 1))
     
-check_file_not_empty "/home/nvimtest/test-project/traverse-output/sequence-diagrams/sequence-2025-09-25.mmd" \
-    "Sequence diagram file not empty"
+    # Check if not empty
+    size=$(docker exec traverse-test-container stat -c%s "$SEQUENCE_FILE" 2>/dev/null || echo "0")
+    if [ "$size" -gt "0" ]; then
+        echo -e "${GREEN}✓ Sequence diagram file not empty (size: ${size} bytes)${NC}"
+        TESTS_PASSED=$((TESTS_PASSED + 1))
+    else
+        echo -e "${RED}✗ Sequence diagram file is empty${NC}"
+        TESTS_FAILED=$((TESTS_FAILED + 1))
+        FAILURES="${FAILURES}\n  - Sequence diagram file is empty"
+    fi
+else
+    echo -e "${RED}✗ Sequence diagram file not found${NC}"
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    FAILURES="${FAILURES}\n  - Sequence diagram file not found"
+fi
 
 # Test 8: Storage analysis
 run_test "Storage analysis" \
@@ -194,11 +229,27 @@ run_test "Storage analysis" \
     "storage"
 
 # Check storage report file
-check_file_exists "/home/nvimtest/test-project/traverse-output/storage-reports/storage-2025-09-25.md" \
-    "Storage report file exists"
+# Use wildcard to handle any date
+STORAGE_FILE=$(docker exec traverse-test-container bash -c "ls /home/nvimtest/test-project/traverse-output/storage-reports/storage-*.md 2>/dev/null | head -1" || echo "")
+if [ -n "$STORAGE_FILE" ]; then
+    echo -e "${GREEN}✓ Storage report file exists${NC}"
+    TESTS_PASSED=$((TESTS_PASSED + 1))
     
-check_file_not_empty "/home/nvimtest/test-project/traverse-output/storage-reports/storage-2025-09-25.md" \
-    "Storage report file not empty"
+    # Check if not empty
+    size=$(docker exec traverse-test-container stat -c%s "$STORAGE_FILE" 2>/dev/null || echo "0")
+    if [ "$size" -gt "0" ]; then
+        echo -e "${GREEN}✓ Storage report file not empty (size: ${size} bytes)${NC}"
+        TESTS_PASSED=$((TESTS_PASSED + 1))
+    else
+        echo -e "${RED}✗ Storage report file is empty${NC}"
+        TESTS_FAILED=$((TESTS_FAILED + 1))
+        FAILURES="${FAILURES}\n  - Storage report file is empty"
+    fi
+else
+    echo -e "${RED}✗ Storage report file not found${NC}"
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    FAILURES="${FAILURES}\n  - Storage report file not found"
+fi
 
 # Test 9: GenerateAll command
 run_test "GenerateAll command" \
@@ -206,20 +257,36 @@ run_test "GenerateAll command" \
     "All diagrams generated"
 
 # Check GenerateAll output files
-check_file_exists "/home/nvimtest/test-project/traverse-output/diagrams/all-2025-09-25.dot" \
-    "GenerateAll DOT file exists"
-    
-check_file_exists "/home/nvimtest/test-project/traverse-output/diagrams/all-2025-09-25.mmd" \
-    "GenerateAll Mermaid file exists"
+# Use wildcards to handle any date
+ALL_DOT_FILE=$(docker exec traverse-test-container bash -c "ls /home/nvimtest/test-project/traverse-output/diagrams/all-*.dot 2>/dev/null | head -1" || echo "")
+ALL_MMD_FILE=$(docker exec traverse-test-container bash -c "ls /home/nvimtest/test-project/traverse-output/diagrams/all-*.mmd 2>/dev/null | head -1" || echo "")
+
+if [ -n "$ALL_DOT_FILE" ]; then
+    echo -e "${GREEN}✓ GenerateAll DOT file exists${NC}"
+    TESTS_PASSED=$((TESTS_PASSED + 1))
+else
+    echo -e "${RED}✗ GenerateAll DOT file not found${NC}"
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    FAILURES="${FAILURES}\n  - GenerateAll DOT file not found"
+fi
+
+if [ -n "$ALL_MMD_FILE" ]; then
+    echo -e "${GREEN}✓ GenerateAll Mermaid file exists${NC}"
+    TESTS_PASSED=$((TESTS_PASSED + 1))
+else
+    echo -e "${RED}✗ GenerateAll Mermaid file not found${NC}"
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    FAILURES="${FAILURES}\n  - GenerateAll Mermaid file not found"
+fi
 
 # Test 10: Validate DOT format
 run_test "DOT file format validation" \
-    "head -1 /home/nvimtest/test-project/traverse-output/diagrams/all-2025-09-25.dot" \
+    "head -1 /home/nvimtest/test-project/traverse-output/diagrams/all-*.dot 2>/dev/null" \
     "digraph"
 
 # Test 11: Validate Mermaid format
 run_test "Mermaid file format validation" \
-    "head -1 /home/nvimtest/test-project/traverse-output/diagrams/all-2025-09-25.mmd" \
+    "head -1 /home/nvimtest/test-project/traverse-output/diagrams/all-*.mmd 2>/dev/null" \
     "sequenceDiagram"
 
 # Step 4: Generate test report
