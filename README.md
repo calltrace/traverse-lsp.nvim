@@ -1,5 +1,10 @@
 # Traverse Plugin for Neovim
 
+[![Test](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/test.yml/badge.svg)](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/test.yml)
+[![Release](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/release.yml/badge.svg)](https://github.com/calltrace/traverse-lsp.nvim/actions/workflows/release.yml)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/calltrace/traverse-lsp.nvim)](https://github.com/calltrace/traverse-lsp.nvim/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Neovim 0.11+ plugin for traverse-lsp - Workspace-level analysis and diagram generation for Solidity projects.
 
 > **Requirements:** Neovim 0.11+ only
